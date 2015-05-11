@@ -271,7 +271,7 @@ def add_protocols(session, verbose):
 def create_tables(args):
   """Creates all necessary tables (only to be used at the first time)"""
 
-  from bob.db.base.utils import create_engine_try_nolock
+  from bob.db.utils import create_engine_try_nolock
 
   engine = create_engine_try_nolock(args.type, args.files[0], echo=(args.verbose >= 2));
   Client.metadata.create_all(engine);
@@ -285,7 +285,7 @@ def create_tables(args):
 def create(args):
   """Creates or re-creates this database"""
 
-  from bob.db.base.utils import session_try_nolock
+  from bob.db.utils import session_try_nolock
 
   dbfile = args.files[0]
 
@@ -315,6 +315,6 @@ def add_command(subparsers):
   parser.add_argument('-v', '--verbose', action='count', help='Do SQL operations in a verbose way?')
   parser.add_argument('-D', '--directory', metavar='DIR', default='../CASME2/Cropped/', help='The path to the directory containing the subjects folders, which have the frames')
   parser.add_argument('--extension', metavar='STR', default='.jpg', help='The file extension of the image files from the CASME2 database')
-  parser.add_argument('-A', '--annotdir', metavar='DIR', default='bob/db/casme2/annotations.csv', help="Change the relative path to the directory containing the action_unit information file of the CASME2 database (defaults to %(default)s)")
+  parser.add_argument('-A', '--annotdir', metavar='DIR', default='xbob/db/casme2/annotations.csv', help="Change the relative path to the directory containing the action_unit information file of the CASME2 database (defaults to %(default)s)")
 
   parser.set_defaults(func=create) #action

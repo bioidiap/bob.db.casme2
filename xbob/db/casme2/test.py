@@ -23,7 +23,7 @@ import os, sys
 import unittest
 
 from models import *;
-import bob.db.casme2;
+import xbob.db.casme2;
 
 from sqlalchemy import create_engine;
 from sqlalchemy.orm import Session, sessionmaker;
@@ -31,13 +31,12 @@ from sqlalchemy.orm import Session, sessionmaker;
 
 def db_available(test):
   """Decorator for detecting if OpenCV/Python bindings are available"""
-  from bob.io.base.test_utils import datafile
   from nose.plugins.skip import SkipTest
   import functools
 
   @functools.wraps(test)
   def wrapper(*args, **kwargs):
-    dbfile = datafile("db.sql3", __name__, None)
+    dbfile = "./xbob/db/casme2/db.sql3"
     if os.path.exists(dbfile):
       return test(*args, **kwargs)
     else:
@@ -49,7 +48,7 @@ def db_available(test):
 @db_available
 def test_clients():
   # test that the expected number of clients is returned
-  db = bob.db.casme2.Database()
+  db = xbob.db.casme2.Database()
   assert len(db.groups()) == 3
   assert len(db.client_ids()) == 26
   assert len(db.client_ids(groups='world')) == 18
@@ -66,7 +65,7 @@ def test_clients():
 @db_available
 def test_files():
   # test that the files() function returns reasonable numbers of files
-  db = bob.db.casme2.Database()
+  db = xbob.db.casme2.Database()
   assert len(db.objects()) == 257
   #assert len(db.objects(protocol='emotions')) == 26 #TODO: The object method is not using the keyword argument ``protocol''
 
@@ -80,7 +79,7 @@ def test_files():
 @db_available
 def test_annotations():
   # Tests that for all objects
-  db = bob.db.casme2.Database()
+  db = xbob.db.casme2.Database()
 
   #implement test for annotations
   for f in db.objects():
@@ -92,7 +91,7 @@ def test_annotations():
 @db_available
 def test_driver_api():
 
-  from bob.db.base.script.dbmanage import main
+  from bob.db.script.dbmanage import main
   assert main('casme2 dumplist --self-test'.split()) == 0
   #assert main('casme2 dumplist --group=dev --protocol=emotions  --emotion=happiness --self-test'.split()) == 2
   assert main('casme2 checkfiles --self-test'.split()) == 0

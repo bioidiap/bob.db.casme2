@@ -25,11 +25,11 @@
 
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, or_, and_, not_
-from bob.db.base.sqlalchemy_migration import Enum, relationship
+from bob.db.sqlalchemy_migration import Enum, relationship
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declarative_base
 
-import bob.db.verification.utils
+import xbob.db.verification.utils
 
 import os
 
@@ -59,7 +59,7 @@ class Client(Base):
         return "Client<(%d, '%s', '%s')>" % (self.id, self.sgroup)
 
 
-class File(Base,bob.db.verification.utils.File ):
+class File(Base,xbob.db.verification.utils.File ):
     """
     NOTE:this interface is the variant of the CASME2 database which does not use the video files, but rather the ones converted
     into frames of images. (i.e. the ones in the "CROPPED" folder). As such, this folder is supposed to be an abstract
@@ -100,7 +100,7 @@ class File(Base,bob.db.verification.utils.File ):
 
     def __init__(self, client_id, path, emotion, onset, apex, offset):
         # call base class constructor
-        bob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
+        xbob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
 
         self.client_id = client_id;
         self.path = path;
@@ -116,7 +116,7 @@ class File(Base,bob.db.verification.utils.File ):
 
 
 
-class Frame(Base, bob.db.verification.utils.File):
+class Frame(Base, xbob.db.verification.utils.File):
     """
     This is represents the frames in the video file (in this case, contained in the folder)
 
@@ -138,7 +138,7 @@ class Frame(Base, bob.db.verification.utils.File):
 
     def __init__(self, path,client_id, file_id,  frame_no, filename):
         # call base class constructor
-        bob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
+        xbob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
 
         #set the variables
         self.file_id = file_id;

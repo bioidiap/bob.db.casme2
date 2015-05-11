@@ -26,7 +26,7 @@ version = open("version.txt").read().rstrip()
 # parameters that define our package.
 setup(
 
-    name='bob.db.casme2',
+    name='xbob.db.casme2',
     version=version,
     description='CASME2  Database Access API for Bob',
     url='https://pypi.python.org/pypi/bob.db.arface',
@@ -35,7 +35,7 @@ setup(
     author_email='laurent.el-shafey@idiap.ch',
     modifying_author ='Abdullahi Adamu',
     modifying_author_email= 'research.abdullah@gmail.com',
-    keywords='micro-expressions, bob, bob.db, CASME2',
+    keywords='micro-expressions, CASME2',
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.
@@ -46,19 +46,19 @@ setup(
     install_requires=[
       'setuptools',
       'six',  # python2/3 compatibility library
-      'bob.db.base',
-      'bob.db.verification.utils' # defines a set of utilities for face verification databases like this one.
+      'bob', # base signal proc./machine learning library
+      'xbob.db.verification.utils' # defines a set of utilities for face verification databases like this one.
     ],
 
     namespace_packages = [
-      'bob',
-      'bob.db',
+      'xbob',
+      'xbob.db',
     ],
 
     entry_points = {
       # bob database declaration
       'bob.db': [
-        'casme2 = bob.db.casme2.driver:Interface',
+        'casme2 = xbob.db.casme2.driver:Interface',
       ],
     },
 
