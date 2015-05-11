@@ -137,7 +137,7 @@ def add_files(session, directory, annotations_file, verbose):
         return annotations;
 
 
-    def get_file_annotation(filename, annotationDict):
+    def get_file_annotation(filename, annotationDict, subject_id):
         """
 
         :param filename:
@@ -146,8 +146,8 @@ def add_files(session, directory, annotations_file, verbose):
         """
 
         for i, annotation_i in enumerate(annotationDict):
-
-            if annotation_i['filename'] == filename:
+            s_id = subject_id.split("sub")[1]
+            if annotation_i['filename'] == filename and annotation_i['subject_id'] == str(int(s_id)):
 
                 return annotation_i;
         #nothing was found
@@ -167,7 +167,6 @@ def add_files(session, directory, annotations_file, verbose):
         raise "Sorry, there was no annotaitons file found in the directory";
         list_annotation = None;
     if verbose: print("Completed reading annotation files ...")
-
 
     #get list of subject directories
     sub_dir = os.listdir(directory);
@@ -197,11 +196,11 @@ def add_files(session, directory, annotations_file, verbose):
             frame_files = os.listdir(os.path.join(subject_dir, videofile));
 
             #get the file annotation and then save
-            annotation = get_file_annotation(videofile, list_annotation)
+            annotation = get_file_annotation(videofile, list_annotation, sub_id)
+            if annotation is None:
+              import ipdb; ipdb.set_trace();
 
-
-
-            if annotation != None:
+            if annotation is not None:
 
                 print ">>annotation",annotation;
                 print ">>videopath",str(videofile_path);
@@ -209,7 +208,8 @@ def add_files(session, directory, annotations_file, verbose):
                 #create and save the file
                 file_obj = File(client_id= int(annotation['subject_id']), path= str(videofile_path), emotion=str(annotation['emotion']),
                                 onset= int(annotation['onset']),apex= int(annotation['apex']),offset= int(annotation['offset']));
-
+                
+                                
                 if verbose: print ">> attaching action_units", annotation['au_set'];
                 file_obj.actionunits = [ActionUnits(actionunit = au) for au in annotation['au_set']];
 
