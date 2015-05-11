@@ -1,0 +1,3 @@
+include README.rst bootstrap-buildout.py buildout.cfg COPYING version.txt
+recursive-include doc *.py *.rst
+recursive-include bob *.sql3
