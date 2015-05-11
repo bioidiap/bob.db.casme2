@@ -71,9 +71,9 @@ def test_files():
 
   # number of world files are identical for all protocols
   #assert len(db.objects(groups='world', protocol='emotion')) == 18 #TODO: The object method is not using the keyword argument ``protocol''
-  assert len(db.objects(groups='world')) == 186
-  assert len(db.objects(groups='dev')) == 48
-  assert len(db.objects(groups='eval')) == 23
+  assert len(db.objects(groups='world')) == 206#186
+  assert len(db.objects(groups='dev')) == 33#48
+  assert len(db.objects(groups='eval')) == 18#23
 
 
 @db_available
@@ -86,6 +86,16 @@ def test_annotations():
       annotations = db.annotations(f)
       assert annotations is not None
       #assert 'actionunit' in annotations
+
+
+
+#Check if the client id matches with a substring in the filename ('....sub<ID>...')
+def test_subject_id():
+  db = xbob.db.casme2.Database()
+
+  for f in db.objects():  
+    assert f.path.find("sub"+str(f.client_id).zfill(2)) > -1
+
 
 
 @db_available

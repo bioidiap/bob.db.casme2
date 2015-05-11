@@ -137,7 +137,7 @@ def add_files(session, directory, annotations_file, verbose):
         return annotations;
 
 
-    def get_file_annotation(filename, annotationDict):
+    def get_file_annotation(filename, annotationDict, subject_id):
         """
 
         :param filename:
@@ -146,13 +146,12 @@ def add_files(session, directory, annotations_file, verbose):
         """
 
         for i, annotation_i in enumerate(annotationDict):
-
-            if annotation_i['filename'] == filename:
+            s_id = subject_id.split("sub")[1]
+            if annotation_i['filename'] == filename and annotation_i['subject_id'] == str(int(s_id)):
 
                 return annotation_i;
         #nothing was found
         return None;
-
 
 
 
@@ -197,7 +196,7 @@ def add_files(session, directory, annotations_file, verbose):
             frame_files = os.listdir(os.path.join(subject_dir, videofile));
 
             #get the file annotation and then save
-            annotation = get_file_annotation(videofile, list_annotation)
+            annotation = get_file_annotation(videofile, list_annotation, sub_id)
 
 
 
