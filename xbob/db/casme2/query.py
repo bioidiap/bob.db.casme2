@@ -39,27 +39,28 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
   """
 
   def __init__(self, original_directory = None, original_extension = '.ppm'):
+      #import ipdb; ipdb.set_trace();
+  
       # call base class constructor
       xbob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File, original_directory=original_directory, original_extension=original_extension)
       # defines valid entries for various parameters
-      self.m_groups  = Client.group_choices;
+      #self.m_groups  = Client.group_choices;
       self.m_protocols = Protocol.protocol_choices;
-      self.m_emotions = File.emotion_choices;
+      self.m_emotions = File.emotion_choices
+      self.m_groups = ClientxProtocol.groups      
 
 
   def groups(self, protocol=None):
       """Returns the names of all registered groups"""
-
       return self.m_groups
 
-  def clients(self, groups=None, genders=None, protocol=None):
+  def clients(self, protocol=None, groups=None):
       """Returns a list of Client objects for the specific query by the user.
 
       Keyword Parameters:
 
       groups
-        One or several groups to which the models belong ('world', 'dev', 'eval').
-        If not specified, all groups are returned.
+        Ignored
 
       protocol
         Ignored since clients are identical for all protocols.
@@ -67,10 +68,7 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
       Returns: A list containing all the Client objects which have the desired properties.
       """
 
-      groups = self.check_parameters_for_validity(groups, "group", self.m_groups);
-      query = self.query(Client).filter(Client.sgroup.in_(groups));
-
-
+      query = self.query(Client)
       return [client for client in query]
 
 
@@ -89,9 +87,7 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Returns: A list containing all the client ids which have the desired properties.
     """
 
-
-
-    return [client.id for client in self.clients(groups, genders, protocol)]
+    return [client.id for client in self.clients(groups, protocol)]
 
 
   # model_ids() and client_ids() functions are identical
@@ -129,85 +125,64 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
 
 
 
-  def objects(self, groups=None, protocol=None, model_ids=None, emotions=None, genders = None):
+  def objects(self, protocol=None, model_ids=None, emotions=None, purposes=None, groups=None):
+  #def objects(self, groups=None, protocol=None, model_ids=None, emotions=None, genders = None):  
     """Using the specified restrictions, this function returns a list of File objects.
 
     Keyword Parameters:
 
-    groups
-      One or several groups to which the models belong ('world', 'dev', 'eval').
-
     protocol
-      CASME2 protocols ('emotions').
-      Note: this field is ignored for group 'world'.
+      CASME2 protocols.
 
     model_ids
       If given (as a list of model id's or a single one), only the files belonging to the specified model id is returned.
 
-
     emotions
       One or several emotions from - If not specified, objects with all expressions emotions returned.
 
+    purpose
+      The purpose of the Object (Train or Test)
 
     """
     # check that every parameter is as expected
-    groups = self.check_parameters_for_validity(groups, "group", self.m_groups);
-    emotions = self.check_parameters_for_validity(emotions, "emotions", self.m_emotions);
+    emotions = self.check_parameters_for_validity(emotions, "emotions", self.m_emotions)
+    protocol = self.check_parameters_for_validity(protocol, "protocol", self.m_protocols)[0]
+    groups = self.check_parameters_for_validity(groups, "groups", self.m_groups)  
+    
+    if protocol is None:
+      raise ValueError("Keyword ``protocol'' must be defined")
 
+    if type(protocol) is not str:
+      raise ValueError("Keyword ``protocol'' must be str")
 
-    # assure that the given model ids are in a tuple
-    import collections
-    if(model_ids is None):
-      model_ids = ()
-    elif(not isinstance(model_ids,collections.Iterable)):
-      model_ids = (model_ids,)
+    #Queruing for protocol
+    q      = self.query(File,ClientxProtocol).join(ClientxProtocol, File.client_id==ClientxProtocol.client_id).filter(ClientxProtocol.protocol_id==protocol)
+    
+    #Querying for emotion
+    if emotions:
+      q = q.filter(File.emotion.in_(emotions))
 
-    # Now query the database
+    #Querying for models
+    if model_ids:
+      q = q.filter(File.client_id.in_(model_ids))
+      
+    #Querying for models
+    if groups:
+      q = q.filter(ClientxProtocol.group.in_(groups))
+      
+    
     retval = []
-    if 'world' in groups:
-        q = self.query(File).join(Client).filter(Client.sgroup == 'world');
+    #post-processing
+    for r in list(q):
+      r[0].protocol = r[1].protocol_id
+      r[0].group = r[1].group
+      retval.append(r[0])
 
-        if emotions:
-            q = q.filter(File.emotion.in_(emotions));
-
-        if model_ids:
-            q = q.filter(Client.id.in_(model_ids))
-        q = q.order_by(File.client_id, File.id)
-        retval += list(q);
-
-    if ('dev' in groups):
-
-        q = self.query(File).join(Client).filter(Client.sgroup == 'dev');
-
-        if emotions:
-            q = q.filter(File.emotion.in_(emotions));
-
-
-        if model_ids:
-            q = q.filter(Client.id.in_(model_ids))
-        q = q.order_by(File.client_id, File.id)
-        retval += list(q);
-
-    if ('eval' in groups):
-
-        q = self.query(File).join(Client).filter(Client.sgroup == 'eval');
-
-        if emotions:
-            q = q.filter(File.emotion.in_(emotions));
-
-        if model_ids:
-            q = q.filter(Client.id.in_(model_ids))
-        q = q.order_by(File.client_id, File.id)
-        retval += list(q);
+    return list(set(retval)) # To remove duplicates   
 
 
 
-
-    return list(set(retval)) # To remove duplicates
-
-
-
-  def annotations(self, file):
+  def annotations(self, file_id):
     """Returns the annotations for the image with the given file id.
 
     Keyword Parameters:
@@ -217,7 +192,6 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
 
     Returns:  the action units for the given file
     """
-
     self.assert_validity()
     # return the annotations as returned by the call function of the Annotation object
-    return file.actionunits
+    return file_id.actionunits

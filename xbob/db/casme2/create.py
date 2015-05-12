@@ -29,39 +29,15 @@ def add_clients(session, verbose = True):
     """Adds the clients and split up the groups 'world', 'dev', and 'eval'"""
 
     # Note: This is not the most optimal split of train, validation and the testing set for CASME2,
-
-
-    #WORLD - Training set
-    world_ids = set((4, 5, 7 ,8	,9,	10,	11,	12,	13,	15,	17,	18,	19,	20,	21,	23,	24,	26));
-
-    #DEV - Validation set
-    dev_ids = set((1,	2,	14,	25));
-
-    #EVALS - Test set
-    eval_ids = set((3, 6,	16,	22));
-
-
-    if verbose: print('Adding clients to the database ...');
-    # add these clients
-    for id in world_ids:
-        if verbose>1: print("  Adding client 'm-%03d' to the world set" % id)
-        session.add(Client(id, 'world'))
-
-
-    for id in dev_ids:
-        if verbose>1: print("  Adding client 'm-%03d' to the dev set" % id)
-        session.add(Client(id, 'dev'))
-
-    for id in eval_ids:
-        if verbose>1: print("  Adding client 'm-%03d' to the eval set" % id)
-        session.add(Client(id, 'eval'));
-
+    if verbose: print('Adding clients to the database ...')
+    
+    clients = range(1,27)
+    for id in clients:
+        if verbose>1: print("  Adding client 'm-%03d' to the world set" % id)    
+        session.add(Client(id))
 
     if verbose:print "Commiting changes of clients to db"
     session.commit();
-
-
-
 
 
 
@@ -125,8 +101,6 @@ def add_files(session, directory, annotations_file, verbose):
 
                 #split the action units by their combination character "+"
                 au_split = au_set.split('+');
-
-
 
                 annotation_dict = {'subject_id': subject_id, 'filename': filename,
                                    'onset': onset, 'offset': offset, 'apex': apex,
@@ -251,19 +225,32 @@ def add_files(session, directory, annotations_file, verbose):
 def add_protocols(session, verbose):
   """Adds various protocols for the CASME2 database"""
   if verbose: print("Adding protocols ...")
-
-
-  #add all the files to the protocol of emotions
-
-  # different emoitions
-  for e in File.emotion_choices:
-      if True: print("  Adding '%s' protocol for emotions protocol" % (e))
-      session.add(Protocol(protocol=str('emotions'), emotion=str(e)));
-      session.add(Protocol(protocol=str('all'), emotion=str(e)));
-      session.commit();
+  
+  for i in range(1,27):
+      protocol_name = "fold_{0}".format(str(i))
+      session.add(Protocol(protocol=protocol_name))
+  session.commit()
 
 
 
+def add_clientxprotocols(session, verbose):
+  """ Creating the leave-one-out folds """
+  
+  if verbose: print("Adding the folds ...")
+  
+  clients   = range(1,27)
+  protocols = range(1,27)
+  
+  for p in protocols:
+    for c in clients:
+    
+      protocol_name = "fold_{0}".format(p)
+    
+      if p==c:
+        session.add(ClientxProtocol(c, protocol_name, 'test'))
+      else:
+        session.add(ClientxProtocol(c, protocol_name, 'train'))
+  session.commit()
 
 
 
@@ -302,6 +289,7 @@ def create(args):
   add_clients(s, args.verbose)
   add_files(s, args.directory, args.annotdir, args.verbose)
   add_protocols(s, args.verbose)
+  add_clientxprotocols(s, args.verbose)
   s.commit()
   s.close()
 

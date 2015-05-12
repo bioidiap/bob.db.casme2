@@ -44,19 +44,20 @@ class Client(Base):
     # Group to which the client belongs to
     # NOTES: though this groups have been defined, due to the imbalanced nature of the dataset, its advised to combine all
     # the groups into one, perform dataset imabalance correction and then perform
-    group_choices = ('dev', 'eval', 'world');
+    #group_choices = ('dev', 'eval', 'world');
 
     id = Column(Integer, primary_key=True); #The subject ID as in the file
-    sgroup = Column(Enum(*group_choices));
+    #sgroup = Column(Enum(*group_choices));
    
 
 
-    def __init__(self, id, sgroup):
+    def __init__(self, id):
         self.id = id
-        self.sgroup = sgroup;
+        #self.sgroup = sgroup;
 
     def __repr__(self):
-        return "Client<(%d, '%s', '%s')>" % (self.id, self.sgroup)
+        return "Client<(%d, '%s')>" % (self.id)
+        #return "Client<(%d, '%s', '%s')>" % (self.id, self.sgroup)
 
 
 class File(Base,xbob.db.verification.utils.File ):
@@ -133,7 +134,7 @@ class Frame(Base, xbob.db.verification.utils.File):
     filename = Column(String) # the filename of the jpeg image file - i.e. the frame itself.
 
     # a back-reference from the client class to a list of files
-    files = relationship("File", backref=backref("frames", order_by=id))
+    files = relationship("File", backref=backref("frames", order_by=frame_no))    
 
 
     def __init__(self, path,client_id, file_id,  frame_no, filename):
@@ -180,19 +181,39 @@ class Protocol(Base):
     """The protocols of the CASME2 database."""
     __tablename__ = 'protocol'
 
-    protocol_choices = ('all','emotions')
+    protocol_choices = []
+    for i in range(1,27):
+        protocol_choices.append("fold_{0}".format(str(i)))
 
-    id = Column(Integer, primary_key=True, autoincrement= True)
-    name = Column(Enum(*protocol_choices))
-    emotion = Column(Enum(*File.emotion_choices), ForeignKey('file.emotion'))
+    #id      = Column(Integer, primary_key=True, autoincrement= True)
+    name    = Column(Enum(*protocol_choices), primary_key=True)
 
-
-    def __init__(self, protocol, emotion):
-        self.name = protocol;
-        self.emotion = emotion;
-
+    def __init__(self, protocol):
+        self.name     = protocol
 
     def __repr__(self):
-        return "<Protocol('%s','%s')>" % (
-            self.name, self.emotion)
+        return "<Protocol('%s')>" % (
+            self.name)
+
+
+class ClientxProtocol(Base):
+    """Cross table between client and protocol."""
+    __tablename__ = 'clientXprotocol'
+
+    groups    = ('train','test')
+    id          = Column(Integer, primary_key=True, autoincrement= True)
+    client_id   = Column(Integer, ForeignKey('client.id')); # the client id the fram belongs to
+    protocol_id = Column(String, ForeignKey('protocol.name')); # the protocol id the fram belongs to
+    group     = Column(Enum(*groups)) #The purpose of the client
+
+    def __init__(self, client_id, protocol_id, group):
+        self.protocol_id = protocol_id
+        self.client_id   = client_id
+        self.group       = group
+
+    def __repr__(self):
+        return "<ClientxProtocol('%s','%s','%s')>" % (
+            self.protocol_id, self.client_id, self.group)
+
+
 

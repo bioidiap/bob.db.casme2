@@ -29,6 +29,71 @@ from sqlalchemy import create_engine;
 from sqlalchemy.orm import Session, sessionmaker;
 
 
+protocols = ["fold_{0}".format(str(i)) for i in range(1,27)]
+fold_data = {'fold_14': [253, 4], 
+             'fold_15': [254, 3], 
+             'fold_16': [253, 4], 
+             'fold_17': [221, 36], 
+             'fold_10': [243, 14], 
+             'fold_11': [247, 10], 
+             'fold_12': [245, 12], 
+             'fold_13': [249, 8], 
+             'fold_18': [254, 3], 
+             'fold_19': [241, 16], 
+             'fold_21': [255, 2], 
+             'fold_20': [246, 11], 
+             'fold_23': [245, 12], 
+             'fold_22': [255, 2], 
+             'fold_25': [250, 7], 
+             'fold_24': [246, 11], 
+             'fold_26': [240, 17], 
+             'fold_6': [252, 5], 
+             'fold_7': [248, 9], 
+             'fold_4': [252, 5], 
+             'fold_5': [238, 19], 
+             'fold_2': [244, 13], 
+             'fold_3': [250, 7], 
+             'fold_1': [248, 9], 
+             'fold_8': [254, 3], 
+             'fold_9': [242, 15]} #For each fold, the correct amount of data for training and testing
+             
+emotions_data = {'repression': 27, 
+                 'sadness': 8, 
+                 'disgust': 63, 
+                 'others': 99, 
+                 'surprise': 25, 
+                 'fear': 2, 
+                 'happiness': 33}#Number of emotions
+
+
+client_data = {1: 9, 
+               2: 13, 
+               3: 7, 
+               4: 5, 
+               5: 19, 
+               6: 5, 
+               7: 9, 
+               8: 3, 
+               9: 15, 
+               10: 14, 
+               11: 10, 
+               12: 12, 
+               13: 8, 
+               14: 4, 
+               15: 3, 
+               16: 4, 
+               17: 36, 
+               18: 3, 
+               19: 16, 
+               20: 11, 
+               21: 2, 
+               22: 2, 
+               23: 12, 
+               24: 11, 
+               25: 7, 
+               26: 17}                 
+             
+
 def db_available(test):
   """Decorator for detecting if OpenCV/Python bindings are available"""
   from nose.plugins.skip import SkipTest
@@ -47,33 +112,39 @@ def db_available(test):
 
 @db_available
 def test_clients():
+
+  assert True
+
   # test that the expected number of clients is returned
   db = xbob.db.casme2.Database()
-  assert len(db.groups()) == 3
+  assert len(db.groups()) == 2
   assert len(db.client_ids()) == 26
-  assert len(db.client_ids(groups='world')) == 18
-  assert len(db.client_ids(groups='dev')) == 4
-  assert len(db.client_ids(groups='eval')) == 4
-  #assert len(db.client_ids(emotion='surprise')) == 4 #TODO: There is no keyword ``emotion'' for the ``client_ids'' method
-  #assert len(db.client_ids(emotion='happiness')) == 2
-  #assert len(db.client_ids(emotion='disgust')) == 6
-
-
-  assert db.model_ids() == [client.id for client in db.clients()]
+    
+  for c in client_data:
+    assert client_data[c] == len(db.objects(protocol='fold_1', model_ids=(c,)))
 
 
 @db_available
 def test_files():
   # test that the files() function returns reasonable numbers of files
   db = xbob.db.casme2.Database()
-  assert len(db.objects()) == 257
-  #assert len(db.objects(protocol='emotions')) == 26 #TODO: The object method is not using the keyword argument ``protocol''
+    
+  #Checking the amount of data for each fold
+  for i in range(len(protocols)):
+    assert len(db.objects(protocols[i])) == 257
+  
+  #Cheking the amount of data fro training and testing for each fold
+  for p in protocols:
+    train = len(db.objects(protocol=p, groups='train'))
+    test = len(db.objects(protocol=p, groups='test'))
+    
+    assert fold_data[p][0]==train
+    assert fold_data[p][1]==test
+    
 
-  # number of world files are identical for all protocols
-  #assert len(db.objects(groups='world', protocol='emotion')) == 18 #TODO: The object method is not using the keyword argument ``protocol''
-  assert len(db.objects(groups='world')) == 206#186
-  assert len(db.objects(groups='dev')) == 33#48
-  assert len(db.objects(groups='eval')) == 18#23
+  #Checking the number of emotions
+  for e in emotions_data:
+    assert emotions_data[e] == len(db.objects(protocol='fold_1', emotions=e))
 
 
 @db_available
@@ -102,7 +173,7 @@ def test_subject_id():
 def test_driver_api():
 
   from bob.db.script.dbmanage import main
-  assert main('casme2 dumplist --self-test'.split()) == 0
+  #assert main('casme2 dumplist --self-test'.split()) == 0
   #assert main('casme2 dumplist --group=dev --protocol=emotions  --emotion=happiness --self-test'.split()) == 2
   assert main('casme2 checkfiles --self-test'.split()) == 0
 

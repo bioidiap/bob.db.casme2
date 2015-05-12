@@ -150,13 +150,13 @@ class Interface(BaseInterface):
     create_command(subparsers)
 
     from .query import Database
-    from .models import Client, File, Protocol
+    from .models import Client, File, Protocol    
     db = Database()
 
     # the "dumplist" action
     parser = subparsers.add_parser('dumplist', help=dumplist.__doc__)
     parser.add_argument('-d', '--directory', help="if given, this path will be prepended to every entry returned.")
-    parser.add_argument('-g', '--group', help="if given, this value will limit the output files to those belonging to a particular group.", choices = Client.group_choices)
+    #parser.add_argument('-g', '--group', help="if given, this value will limit the output files to those belonging to a particular group.", choices = Client.group_choices)
     parser.add_argument('-p', '--protocol', default = 'all', help="limits the dump to a particular subset of the data that corresponds to the given protocol.", choices = Protocol.protocol_choices)
     parser.add_argument('-C', '--client', help="if given, this value will limit the output files to those designed for the given purposes.", choices=db.client_ids() if db.is_valid() else ())
     parser.add_argument('-x', '--emotion', help="if given, this value will limit the output files to those designed for the given emotion.", choices=File.emotion_choices)
