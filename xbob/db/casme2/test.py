@@ -152,7 +152,7 @@ def test_annotations():
   # Tests that for all objects
   db = xbob.db.casme2.Database()
 
-  #implement test for annotations
+  #implement test for annotationsxbob/db/casme2/test.py
   for f in db.objects():
       annotations = db.annotations(f)
       assert annotations is not None
