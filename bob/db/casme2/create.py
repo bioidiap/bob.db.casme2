@@ -146,12 +146,17 @@ def add_files(session, directory, annotations_file, verbose):
     sub_dir = os.listdir(directory);
 
     for sub_id in sub_dir:
+            
         #set the subject id
         subject_id = sub_id;
         if verbose: print("subject_id: %s", subject_id)
 
+        #if(os.path.basename(  directory  ).startswith(".")):
+        if(os.path.basename(  os.path.join(directory, sub_id)  ).startswith(".")):
+            continue
+
         #get the directory  for all the subjects video frames
-        subject_files_dir = os.listdir(os.path.join(directory, sub_id));
+        subject_files_dir = os.listdir(os.path.join(directory, sub_id))
 
         #make directory to the subjects files
         subject_dir = os.path.join(directory, sub_id);
@@ -164,6 +169,10 @@ def add_files(session, directory, annotations_file, verbose):
         for videofile in subject_files_dir:
 
             videofile_path = os.path.join(subject_dir,videofile);
+ 
+            if(os.path.basename(videofile_path).startswith(".")):
+              continue
+            
             if verbose: print ("file_path: %s" % videofile_path);
 
             #Get list of frame files for that video file
@@ -171,8 +180,6 @@ def add_files(session, directory, annotations_file, verbose):
 
             #get the file annotation and then save
             annotation = get_file_annotation(videofile, list_annotation, sub_id)
-
-
 
             if annotation != None:
 
