@@ -23,6 +23,6 @@ For further documentation on this package, please read the `Stable Version <http
 For a list of tutorials on this or the other packages ob Bob_, or information on submitting issues, asking questions and starting discussions, please visit its website.
 
 .. _bob: https://www.idiap.ch/software/bob
-.. _casme face: http://fu.psych.ac.cn/CASME/casme2-en.php
+.. _CASME2: http://fu.psych.ac.cn/CASME/casme2-en.php
 
 
