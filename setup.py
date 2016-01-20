@@ -22,6 +22,9 @@ from setuptools import setup, find_packages
 # Define package version
 version = open("version.txt").read().rstrip()
 
+from bob.extension.utils import load_requirements
+install_requires = load_requirements()
+
 # The only thing we do in this file is to call the setup() function with all
 # parameters that define our package.
 setup(
@@ -29,12 +32,10 @@ setup(
     name='bob.db.casme2',
     version=version,
     description='CASME2  Database Access API for Bob',
-    url='https://pypi.python.org/pypi/bob.db.arface',
+    url='https://pypi.python.org/pypi/bob.db.casme2',
     license='GPLv3',
-    author='Laurent El Shafey',
-    author_email='laurent.el-shafey@idiap.ch',
-    modifying_author ='Abdullahi Adamu',
-    modifying_author_email= 'research.abdullah@gmail.com',
+    author='Abdullahi Adamu',
+    author_email='research.abdullah@gmail.com',
     keywords='micro-expressions, bob, bob.db, CASME2',
     long_description=open('README.rst').read(),
 
@@ -43,12 +44,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-    install_requires=[
-      'setuptools',
-      'six',  # python2/3 compatibility library
-      'bob.db.base',
-      'bob.db.verification.utils' # defines a set of utilities for face verification databases like this one.
-    ],
+    install_requires = install_requires,
 
     entry_points = {
       # bob database declaration
