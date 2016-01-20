@@ -36,7 +36,7 @@ def add_clients(session, verbose = True):
         if verbose>1: print("  Adding client 'm-%03d' to the world set" % id)    
         session.add(Client(id))
 
-    if verbose:print "Commiting changes of clients to db"
+    if verbose:print("Commiting changes of clients to db")
     session.commit();
 
 
@@ -69,7 +69,7 @@ def add_files(session, directory, annotations_file, verbose):
             if header != i:
                 #read the subjects id
                 subject_id = row[0];
-                if verbose: print "\nsubject id: %s" % subject_id;
+                if verbose: print("\nsubject id: %s" % subject_id;)
 
                 #read filename
                 filename = row[1];
@@ -137,7 +137,7 @@ def add_files(session, directory, annotations_file, verbose):
         list_annotation = read_annotation(annot_file);
     else:
         print("Sorry, Could not find the annotations file in bob.db.casme2");
-        raise "Sorry, there was no annotaitons file found in the directory";
+        raise("Sorry, there was no annotaitons file found in the directory");
         list_annotation = None;
     if verbose: print("Completed reading annotation files ...")
 
@@ -183,14 +183,14 @@ def add_files(session, directory, annotations_file, verbose):
 
             if annotation != None:
 
-                print ">>annotation",annotation;
-                print ">>videopath",str(videofile_path);
+                print(">>annotation",annotation);
+                print(">>videopath",str(videofile_path));
 
                 #create and save the file
                 file_obj = File(client_id= int(annotation['subject_id']), path= str(videofile_path), emotion=str(annotation['emotion']),
                                 onset= int(annotation['onset']),apex= int(annotation['apex']),offset= int(annotation['offset']));
 
-                if verbose: print ">> attaching action_units", annotation['au_set'];
+                if verbose: print(">> attaching action_units", annotation['au_set']);
                 file_obj.actionunits = [ActionUnits(actionunit = au) for au in annotation['au_set']];
 
                 if verbose: print(">>fileobj created:", file_obj);
@@ -203,7 +203,7 @@ def add_files(session, directory, annotations_file, verbose):
                 #querry to get the file id in the database
                 db_file_id = file_obj.id;
 
-                print db_file_id;
+                print(db_file_id);
 
             #loop through the frames of the videofile
             for f in frame_files:
