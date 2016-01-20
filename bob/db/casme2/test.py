@@ -22,7 +22,7 @@
 import os, sys
 import unittest
 
-from models import *;
+from models import Client, File, Frame, ActionUnits, Protocol, ClientxProtocol
 import bob.db.casme2;
 
 from sqlalchemy import create_engine;
