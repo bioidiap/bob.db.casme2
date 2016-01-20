@@ -69,7 +69,7 @@ def add_files(session, directory, annotations_file, verbose):
             if header != i:
                 #read the subjects id
                 subject_id = row[0];
-                if verbose: print("\nsubject id: %s" % subject_id;)
+                if verbose: print("\nsubject id: %s" % subject_id);
 
                 #read filename
                 filename = row[1];
