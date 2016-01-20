@@ -77,7 +77,7 @@ def add_files(session, directory, annotations_file, verbose):
 
                 #read onset
                 onset = (row[2]);
-                if verbose: print("onset: %s" % onset);
+                if verbose: print("onset: %s" % onset); 
 
                 #read apex
                 apex = (row[3]);
