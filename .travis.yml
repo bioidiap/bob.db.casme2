@@ -22,11 +22,11 @@ install:
 script:
 - ./bin/bob_dbmanage.py casme2 download
 - ./bin/coverage run --source=bob.db.casme2 ./bin/nosetests -sv
-#- ./bin/sphinx-build -b doctest doc sphinx
-- ./bin/sphinx-build -b html doc sphinx
+- ./bin/sphinx-build -b doctest docs sphinx
+- ./bin/sphinx-build -b html docs sphinx
 after_success:
 - coveralls
 - wget https://raw.githubusercontent.com/bioidiap/bob.extension/master/scripts/upload-{sphinx,wheel}.sh
-#- chmod a+x upload-sphinx.sh upload-wheel.sh
-#- ./upload-sphinx.sh
-#- ./upload-wheel.sh
+- chmod a+x upload-sphinx.sh upload-wheel.sh
+- ./upload-sphinx.sh
+- ./upload-wheel.sh
