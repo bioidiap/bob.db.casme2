@@ -22,8 +22,9 @@
 import os, sys
 import unittest
 
-from models import Client, File, Frame, ActionUnits, Protocol, ClientxProtocol
-import bob.db.casme2;
+import bob.db.casme2
+from bob.db.casme2.models import Client, File, Frame, ActionUnits, Protocol, ClientxProtocol
+
 
 from sqlalchemy import create_engine;
 from sqlalchemy.orm import Session, sessionmaker;
