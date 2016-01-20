@@ -2,6 +2,23 @@
 .. Manuel Guenther <manuel.guenther@idiap.ch>
 .. Fri Oct 31 14:18:57 CET 2014
 
+.. image:: http://img.shields.io/badge/docs-stable-yellow.png
+   :target: http://pythonhosted.org/bob.db.casme2/index.html
+.. image:: http://img.shields.io/badge/docs-latest-orange.png
+   :target: https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.db.casme2/master/index.html
+.. image:: https://travis-ci.org/bioidiap/bob.db.casme2.svg?branch=master
+   :target: https://travis-ci.org/bioidiap/bob.db.casme2
+.. image:: https://coveralls.io/repos/bioidiap/bob.db.casme2/badge.png
+   :target: https://coveralls.io/r/bioidiap/bob.db.casme2
+.. image:: https://img.shields.io/badge/github-master-0000c0.png
+   :target: https://github.com/bioidiap/bob.db.casme2/tree/master
+.. image:: http://img.shields.io/pypi/v/bob.db.casme2.png
+   :target: https://pypi.python.org/pypi/bob.db.casme2
+.. image:: http://img.shields.io/pypi/dm/bob.db.casme2.png
+   :target: https://pypi.python.org/pypi/bob.db.casme2
+.. image:: https://img.shields.io/badge/raw-data--files-a000a0.png
+   :target: http://fu.psych.ac.cn/CASME/casme2-en.php   
+
 
 ===============================================
  CASME 2 Spotaneous Subtle Expression Database
