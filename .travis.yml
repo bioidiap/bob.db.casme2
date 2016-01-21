@@ -1,7 +1,6 @@
 language: python
 matrix:
   include:
-  - python: 2.6
   - python: 2.7
     env:
     - secure: "bDqO1+UnF06zC9Gp8XruCCQfw5d+odrrAPHUojvnNI5Vol/WgP3y5qKVBOjvXIh5R6fLQhJ5YP81D10kBw64ygBCTH7Tz8NUt8OhM0NsqAxnebDOBG/mH5l+0jUYwua/pFzQ3SKQG84S0P/c5t3f6RYOV2uMHnkC5PXWw88e8CCfvCxT6eYtVDhfx11isf4bvlEdmea76CM8gejdPLspyBuV7Hx26a6RUF5MIuCj42Wl2j5aeVoTFKrQ+Uv7kz+Z2LnhhU6a2gebQZWceRaGTCed12sglgxuESk2RohYs9HRexaY5fQRKDufcg1NvSQczMTO24BMiw+TZwR4rklNz4StkU4iPbXS9kGLlCehmxCH7ZwaD0Od/pc7nq3bA/g7yB9BoclEaNBG0TElv+yQkFOad/2U6GZygZvbNqbToZhLOIMIDOy9dkLaqqVR6IbSDfwnuDLwNXKn2Zt+4qayarUkcX472JsC+OaHNYQhIb03n4OwsAt02Zzn+/at2zmvxqtEgr8cprq304Ej67mNCLJl+cgwdyGPVO9VXOohaT3xjjr1Qs5TFn7znNpQbt2eVRYbtmUC35/AzDs1T8TPdHaW2IB/1dgUAernBliqtUyA4YRXbl6FjmTwBBR6A5WDpX6jj+c0tRa8VJ6KC71GQaGIjGhR4HshC6J1+Lo9tlk="
@@ -10,6 +9,7 @@ matrix:
     - BOB_UPLOAD_WHEEL="--universal"
   - python: 3.3
   - python: 3.4
+  - python: 3.5
 before_install:
 - sudo add-apt-repository -y ppa:biometrics/bob
 - sudo apt-get update -qq
