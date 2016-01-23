@@ -32,7 +32,7 @@ setup(
     name='bob.db.casme2',
     version=version,
     description='CASME2  Database Access API for Bob',
-    url='https://pypi.python.org/pypi/bob.db.casme2',
+    url='https://github.com/bioidiap/bob.db.casme2',
     license='GPLv3',
     author='Abdullahi Adamu',
     author_email='research.abdullah@gmail.com',
