@@ -187,7 +187,8 @@ def add_files(session, directory, annotations_file, verbose):
                 print(">>videopath",str(videofile_path));
 
                 #create and save the file
-                file_obj = File(client_id= int(annotation['subject_id']), path= str(videofile_path), emotion=str(annotation['emotion']),
+                videofile_relative_path = os.path.join(sub_id, videofile)
+                file_obj = File(client_id= int(annotation['subject_id']), path= str(videofile_relative_path), emotion=str(annotation['emotion']),
                                 onset= int(annotation['onset']),apex= int(annotation['apex']),offset= int(annotation['offset']));
 
                 if verbose: print(">> attaching action_units", annotation['au_set']);
