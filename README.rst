@@ -6,9 +6,9 @@
    :target: http://pythonhosted.org/bob.db.casme2/index.html
 .. image:: http://img.shields.io/badge/docs-latest-orange.png
    :target: https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.db.casme2/master/index.html
-.. image:: https://travis-ci.org/bioidiap/bob.db.casme2.svg?branch=master
+.. image:: https://travis-ci.org/bioidiap/bob.db.casme2.svg?branch=v2.0.3
    :target: https://travis-ci.org/bioidiap/bob.db.casme2
-.. image:: https://coveralls.io/repos/bioidiap/bob.db.casme2/badge.svg?branch=master
+.. image:: https://coveralls.io/repos/bioidiap/bob.db.casme2/badge.svg?branch=v2.0.3
    :target: https://coveralls.io/r/bioidiap/bob.db.casme2
 .. image:: https://img.shields.io/badge/github-master-0000c0.png
    :target: https://github.com/bioidiap/bob.db.casme2/tree/master
