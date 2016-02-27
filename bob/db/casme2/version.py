@@ -29,7 +29,7 @@ def main():
   deps = packages[1:]
 
   print("The installed version of %s is %s" % (this.key, this.version))
-  print("%s is installed at: %s" % (this.key, this.location)
+  print("%s is installed at: %s" % (this.key, this.location))
   print("%s depends on the following Python packages:" % (this.key,))
   for d in deps:
     print(" * %s: %s (%s)" % (d.key, d.version, d.location))
