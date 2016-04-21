@@ -99,10 +99,11 @@ def db_available(test):
   """Decorator for detecting if OpenCV/Python bindings are available"""
   from nose.plugins.skip import SkipTest
   import functools
+  from bob.io.base.test_utils import datafile
 
   @functools.wraps(test)
   def wrapper(*args, **kwargs):
-    dbfile = "./bob/db/casme2/db.sql3"
+    dbfile = datafile("db.sql3", __name__, None)
     if os.path.exists(dbfile):
       return test(*args, **kwargs)
     else:
