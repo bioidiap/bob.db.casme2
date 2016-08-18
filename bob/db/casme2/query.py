@@ -23,11 +23,11 @@ import six
 from .models import *
 from .driver import Interface
 
-import bob.db.verification.utils
+import bob.db.base
 
 SQLITE_FILE = Interface().files()[0]
 
-class Database(bob.db.verification.utils.SQLiteDatabase):
+class Database(bob.db.base.SQLiteDatabase):
   """The database class opens and maintains a connection opened to the Database.
 
   It provides many different ways to probe for the characteristics of the data
@@ -35,10 +35,10 @@ class Database(bob.db.verification.utils.SQLiteDatabase):
   """
 
   def __init__(self, original_directory = None, original_extension = '.ppm'):
-      #import ipdb; ipdb.set_trace();
-  
-      # call base class constructor
-      bob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File, original_directory=original_directory, original_extension=original_extension)
+      super(Database, self).__init__(SQLITE_FILE, File)
+      self.original_directory = original_directory
+      self.original_extension = original_extension
+
       # defines valid entries for various parameters
       #self.m_groups  = Client.group_choices;
       self.m_protocols = Protocol.protocol_choices;

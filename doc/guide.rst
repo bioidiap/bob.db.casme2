@@ -27,7 +27,7 @@ Additionally, there are different protocols:
 The Database Interface
 ----------------------
 
-The :py:class:`bob.db.casme2.Database` complies with the standard biometric verification database as described in :ref:`commons`, implementing the interface :py:class:`bob.db.verification.utils.SQLiteDatabase`.
+The :py:class:`bob.db.casme2.Database` complies with the standard biometric verification database as described in :ref:`commons`, implementing the interface :py:class:`bob.db.base.SQLiteDatabase`.
 
 .. todo::
    Explain the particularities of the :py:class:`bob.db.casme2.Database`.
