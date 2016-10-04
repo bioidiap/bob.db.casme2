@@ -1,0 +1,3 @@
+py:class bob.db.base.file.File
+py:class bob.db.base.database.SQLiteDatabase
+py:class sqlalchemy.ext.declarative.api.Base
