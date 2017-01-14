@@ -101,7 +101,7 @@ class File(Base,bob.db.base.File ):
 
     def __init__(self, client_id, path, emotion, onset, apex, offset):
         # call base class constructor
-        bob.db.base.File.__init__(self, client_id = client_id, path = path)
+        bob.db.base.File.__init__(self, path = path)
 
         self.client_id = client_id;
         self.path = path;
@@ -139,7 +139,8 @@ class Frame(Base, bob.db.base.File):
 
     def __init__(self, path,client_id, file_id,  frame_no, filename):
         # call base class constructor
-        bob.db.base.File.__init__(self, client_id = client_id, path = path)
+        bob.db.base.File.__init__(self, path = path)
+        self.client_id = client_id
 
         #set the variables
         self.file_id = file_id;
