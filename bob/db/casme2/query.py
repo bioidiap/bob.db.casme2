@@ -27,6 +27,7 @@ import bob.db.base
 
 SQLITE_FILE = Interface().files()[0]
 
+
 class Database(bob.db.base.SQLiteDatabase):
   """The database class opens and maintains a connection opened to the Database.
 
@@ -34,41 +35,38 @@ class Database(bob.db.base.SQLiteDatabase):
   and for the data itself inside the database.
   """
 
-  def __init__(self, original_directory = None, original_extension = '.ppm'):
-      super(Database, self).__init__(SQLITE_FILE, File)
-      self.original_directory = original_directory
-      self.original_extension = original_extension
+  def __init__(self, original_directory=None, original_extension='.ppm'):
+    super(Database, self).__init__(SQLITE_FILE, File,
+                                   original_directory, original_extension)
 
-      # defines valid entries for various parameters
-      #self.m_groups  = Client.group_choices;
-      self.m_protocols = Protocol.protocol_choices;
-      self.m_emotions = File.emotion_choices
-      self.m_groups = ClientxProtocol.groups      
-
+    # defines valid entries for various parameters
+    #self.m_groups  = Client.group_choices;
+    self.m_protocols = Protocol.protocol_choices
+    self.m_emotions = File.emotion_choices
+    self.m_groups = ClientxProtocol.groups
 
   def groups(self, protocol=None):
-      """Returns the names of all registered groups"""
-      return self.m_groups
+    """Returns the names of all registered groups"""
+    return self.m_groups
 
   def clients(self, protocol=None, groups=None):
-      """Returns a list of Client objects for the specific query by the user.
+    """Returns a list of Client objects for the specific query by the user.
 
-      Keyword Parameters:
+    Keyword Parameters:
 
-      groups
-        Ignored
+    groups
+      Ignored
 
-      protocol
-        Ignored since clients are identical for all protocols.
+    protocol
+      Ignored since clients are identical for all protocols.
 
-      Returns: A list containing all the Client objects which have the desired properties.
-      """
+    Returns: A list containing all the Client objects which have the desired properties.
+    """
 
-      query = self.query(Client)
-      return [client for client in query]
+    query = self.query(Client)
+    return [client for client in query]
 
-
-  def client_ids(self, groups=None, genders = None, protocol=None):
+  def client_ids(self, groups=None, genders=None, protocol=None):
     """Returns a list of client ids for the specific query by the user.
 
     Keyword Parameters:
@@ -85,10 +83,8 @@ class Database(bob.db.base.SQLiteDatabase):
 
     return [client.id for client in self.clients(groups, protocol)]
 
-
   # model_ids() and client_ids() functions are identical
   model_ids = client_ids
-
 
   def get_client_id_from_file_id(self, file_id, **kwargs):
     """Returns the client_id (real client id) attached to the given file_id
@@ -105,7 +101,6 @@ class Database(bob.db.base.SQLiteDatabase):
     assert q.count() == 1
     return q.first().client_id
 
-
   def get_client_id_from_model_id(self, model_id, **kwargs):
     """Returns the client_id attached to the given model_id
 
@@ -119,10 +114,9 @@ class Database(bob.db.base.SQLiteDatabase):
     # client ids and model ids are identical...
     return model_id
 
-
-
   def objects(self, protocol=None, model_ids=None, emotions=None, purposes=None, groups=None):
-  #def objects(self, groups=None, protocol=None, model_ids=None, emotions=None, genders = None):  
+    # def objects(self, groups=None, protocol=None, model_ids=None,
+    # emotions=None, genders = None):
     """Using the specified restrictions, this function returns a list of File objects.
 
     Keyword Parameters:
@@ -141,42 +135,43 @@ class Database(bob.db.base.SQLiteDatabase):
 
     """
     # check that every parameter is as expected
-    emotions = self.check_parameters_for_validity(emotions, "emotions", self.m_emotions)
-    protocol = self.check_parameters_for_validity(protocol, "protocol", self.m_protocols)[0]
-    groups = self.check_parameters_for_validity(groups, "groups", self.m_groups)  
-    
+    emotions = self.check_parameters_for_validity(
+        emotions, "emotions", self.m_emotions)
+    protocol = self.check_parameters_for_validity(
+        protocol, "protocol", self.m_protocols)[0]
+    groups = self.check_parameters_for_validity(
+        groups, "groups", self.m_groups)
+
     if protocol is None:
       raise ValueError("Keyword ``protocol'' must be defined")
 
     if type(protocol) is not str:
       raise ValueError("Keyword ``protocol'' must be str")
 
-    #Queruing for protocol
-    q      = self.query(File,ClientxProtocol).join(ClientxProtocol, File.client_id==ClientxProtocol.client_id).filter(ClientxProtocol.protocol_id==protocol)
-    
-    #Querying for emotion
+    # Queruing for protocol
+    q = self.query(File, ClientxProtocol).join(ClientxProtocol, File.client_id ==
+                                               ClientxProtocol.client_id).filter(ClientxProtocol.protocol_id == protocol)
+
+    # Querying for emotion
     if emotions:
       q = q.filter(File.emotion.in_(emotions))
 
-    #Querying for models
+    # Querying for models
     if model_ids:
       q = q.filter(File.client_id.in_(model_ids))
-      
-    #Querying for models
+
+    # Querying for models
     if groups:
       q = q.filter(ClientxProtocol.group.in_(groups))
-      
-    
+
     retval = []
-    #post-processing
+    # post-processing
     for r in list(q):
       r[0].protocol = r[1].protocol_id
       r[0].group = r[1].group
       retval.append(r[0])
 
-    return list(set(retval)) # To remove duplicates   
-
-
+    return list(set(retval))  # To remove duplicates
 
   def annotations(self, file_id):
     """Returns the annotations for the image with the given file id.
@@ -189,5 +184,6 @@ class Database(bob.db.base.SQLiteDatabase):
     Returns:  the action units for the given file
     """
     self.assert_validity()
-    # return the annotations as returned by the call function of the Annotation object
+    # return the annotations as returned by the call function of the
+    # Annotation object
     return file_id.actionunits
