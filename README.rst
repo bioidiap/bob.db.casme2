@@ -7,6 +7,8 @@
    :target: https://www.idiap.ch/software/bob/docs/latest/bob/bob.db.casme2/master/index.html
 .. image:: https://gitlab.idiap.ch/bob/bob.db.casme2/badges/master/build.svg
    :target: https://gitlab.idiap.ch/bob/bob.db.casme2/commits/master
+.. image:: https://gitlab.idiap.ch/bob/bob.db.casme2/badges/master/coverage.svg
+   :target: https://gitlab.idiap.ch/bob/bob.db.casme2/commits/master
 .. image:: https://img.shields.io/badge/gitlab-project-0000c0.svg
    :target: https://gitlab.idiap.ch/bob/bob.db.casme2
 .. image:: http://img.shields.io/pypi/v/bob.db.casme2.svg
@@ -30,11 +32,10 @@ This package does not contain the original `CASME2`_ data files, which need to b
 Installation
 ------------
 
-Follow our `installation`_ instructions. Then, using the Python interpreter
-provided by the distribution, bootstrap and buildout this package::
+Complete Bob's `installation`_ instructions. Then, to install this pacakge,
+run::
 
-  $ python bootstrap-buildout.py
-  $ ./bin/buildout
+  $ conda install bob.db.casme2
 
 
 Contact
